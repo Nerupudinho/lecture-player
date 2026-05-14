@@ -1,16 +1,25 @@
-# lecture_player
+# Lecture Player
 
-A new Flutter project.
+A Flutter Android app for commute learning. Aggregates YouTube playlists and lecture recordings into a single player with category-based or random playback. No ads, no algorithm, no distractions — just your content.
 
-## Getting Started
+## Why
 
-This project is a starting point for a Flutter application.
+Commute time was being wasted on passive YouTube browsing. This app lets you deliberately consume learning content on the go without getting pulled into the feed.
 
-A few resources to get you started if this is your first Flutter project:
+## Features
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- Browse 155+ videos across 8 categories (Maven sessions, PM frameworks, etc.)
+- Random or category-based playback
+- Playlist synced from a GitHub Gist — paste the raw URL in Settings to update
+- Zero cost to run
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Setup
+
+1. Clone the repo
+2. Run `flutter pub get`
+3. Build and install on Android: `flutter run`
+4. In Settings, paste the raw URL of your playlist Gist to sync content
+
+## Stack
+
+Flutter · Dart · SQLite · Android
