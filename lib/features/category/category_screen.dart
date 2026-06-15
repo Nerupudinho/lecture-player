@@ -4,7 +4,7 @@ import '../../data/models/category_model.dart';
 import '../../data/models/video_model.dart';
 import '../../shared/shuffle_service.dart';
 import '../player/player_screen.dart';
-import 'category_provider.dart';
+import '../home/home_provider.dart';
 
 class CategoryScreen extends ConsumerStatefulWidget {
   final CategoryModel category;
@@ -33,7 +33,7 @@ class _CategoryScreenState extends ConsumerState<CategoryScreen> {
   @override
   Widget build(BuildContext context) {
     final videosAsync =
-        ref.watch(categoryVideosProvider(widget.category.id!));
+        ref.watch(videosForCategoryProvider(widget.category.id!));
 
     return Scaffold(
       appBar: AppBar(

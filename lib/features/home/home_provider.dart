@@ -4,16 +4,16 @@ import '../../data/daos/video_dao.dart';
 import '../../data/daos/config_dao.dart';
 import '../../data/models/category_model.dart';
 import '../../data/models/video_model.dart';
-import '../../services/md_fetcher_service.dart';
-import '../../services/md_parser_service.dart';
+import '../../services/fetcher_service.dart';
+import '../../services/csv_parser_service.dart';
 
 // --- Providers ---
 
 final categoryDaoProvider = Provider((_) => CategoryDao());
 final videoDaoProvider = Provider((_) => VideoDao());
 final configDaoProvider = Provider((_) => ConfigDao());
-final mdFetcherProvider = Provider((_) => MdFetcherService());
-final mdParserProvider = Provider((_) => MdParserService());
+final fetcherProvider = Provider((_) => FetcherService());
+final csvParserProvider = Provider((_) => CsvParserService());
 
 // Category list for home screen
 final categoriesProvider =
@@ -50,8 +50,8 @@ class RefreshNotifier extends StateNotifier<AsyncValue<void>> {
         state = AsyncValue.error('No source URL configured. Go to Settings.', StackTrace.current);
         return;
       }
-      final raw = await _ref.read(mdFetcherProvider).fetch(url);
-      final parsed = _ref.read(mdParserProvider).parse(raw);
+      final raw = await _ref.read(fetcherProvider).fetch(url);
+      final parsed = _ref.read(csvParserProvider).parse(raw);
 
       final categoryDao = _ref.read(categoryDaoProvider);
       final videoDao = _ref.read(videoDaoProvider);
@@ -81,6 +81,7 @@ class RefreshNotifier extends StateNotifier<AsyncValue<void>> {
       // Invalidate cached data
       _ref.invalidate(categoriesProvider);
       _ref.invalidate(allVideosProvider);
+      _ref.invalidate(videosForCategoryProvider);
 
       state = const AsyncValue.data(null);
     } catch (e, st) {

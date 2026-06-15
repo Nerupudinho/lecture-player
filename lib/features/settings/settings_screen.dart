@@ -100,14 +100,16 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   autocorrect: false,
                   decoration: const InputDecoration(
                     hintText:
-                        'https://gist.githubusercontent.com/.../raw/lectures.md',
+                        'https://docs.google.com/spreadsheets/d/<ID>/gviz/tq?tqx=out:csv',
                     border: OutlineInputBorder(),
                     prefixIcon: Icon(Icons.link),
                   ),
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'Paste the raw URL of your .md playlist file (GitHub Gist, Pastebin, etc.)',
+                  'Paste your Google Sheet CSV URL. Set the sheet to '
+                  '"Anyone with the link → Viewer", then use the gviz CSV link '
+                  '(…/gviz/tq?tqx=out:csv&gid=0).',
                   style: TextStyle(fontSize: 12, color: Colors.grey.shade500),
                 ),
                 const SizedBox(height: 20),
@@ -158,7 +160,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 const Divider(),
                 const SizedBox(height: 16),
                 Text(
-                  'File Format',
+                  'Sheet Format',
                   style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w600,
@@ -172,11 +174,12 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: const Text(
-                    '## Category Name\n'
-                    '- [Video Title](https://youtube.com/watch?v=...)\n'
-                    '- [Another Video](https://maven.com/...)\n\n'
-                    '## Another Category\n'
-                    '- [Title](URL)',
+                    'Link            | Title           | Duplicate\n'
+                    'maven.com/p/... | Lecture title   | FALSE\n'
+                    'youtube.com/... | Another lecture | FALSE\n\n'
+                    'Maven tracking links are decoded automatically.\n'
+                    'Rows with Duplicate = TRUE are skipped.\n'
+                    'Category is set from the title (or a Category column).',
                     style: TextStyle(
                         fontFamily: 'monospace', fontSize: 12, height: 1.6),
                   ),
