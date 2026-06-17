@@ -10,18 +10,9 @@ class VideoDao {
     return db.insert('videos', video.toMap());
   }
 
-  Future<List<VideoModel>> getByCategory(int categoryId) async {
-    final db = await _db;
-    final rows = await db.query('videos',
-        where: 'category_id = ?',
-        whereArgs: [categoryId],
-        orderBy: 'position ASC');
-    return rows.map(VideoModel.fromMap).toList();
-  }
-
   Future<List<VideoModel>> getAll() async {
     final db = await _db;
-    final rows = await db.query('videos', orderBy: 'category_id ASC, position ASC');
+    final rows = await db.query('videos', orderBy: 'position ASC');
     return rows.map(VideoModel.fromMap).toList();
   }
 

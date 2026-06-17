@@ -178,8 +178,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                     'maven.com/p/... | Lecture title   | FALSE\n'
                     'youtube.com/... | Another lecture | FALSE\n\n'
                     'Maven tracking links are decoded automatically.\n'
-                    'Rows with Duplicate = TRUE are skipped.\n'
-                    'Category is set from the title (or a Category column).',
+                    'Rows with Duplicate = TRUE are skipped.',
                     style: TextStyle(
                         fontFamily: 'monospace', fontSize: 12, height: 1.6),
                   ),

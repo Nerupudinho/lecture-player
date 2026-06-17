@@ -7,13 +7,13 @@ import '../../shared/shuffle_service.dart';
 /// then shows a minimal screen with a "Next Shuffle" button.
 class PlayerScreen extends StatefulWidget {
   final VideoModel video;
-  final List<VideoModel> categoryVideos;
+  final List<VideoModel> playlist;
   final ShuffleService shuffleService;
 
   const PlayerScreen({
     super.key,
     required this.video,
-    required this.categoryVideos,
+    required this.playlist,
     required this.shuffleService,
   });
 
@@ -43,7 +43,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
   }
 
   void _nextShuffle() {
-    final next = widget.shuffleService.nextRandom(widget.categoryVideos);
+    final next = widget.shuffleService.nextRandom(widget.playlist);
     if (next != null) {
       setState(() => _current = next);
       _launch(next.url);
@@ -71,7 +71,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
               ),
               const SizedBox(height: 8),
               Text(
-                'Opened in YouTube app',
+                'Opened externally',
                 style: TextStyle(color: Colors.grey.shade500, fontSize: 13),
               ),
               const SizedBox(height: 32),

@@ -1,33 +1,21 @@
-import '../data/models/category_model.dart';
 import '../data/models/video_model.dart';
-import 'categorizer_service.dart';
 import 'link_decoder_service.dart';
 
-class ParsedCategory {
-  final CategoryModel category;
-  final List<VideoModel> videos;
-  ParsedCategory({required this.category, required this.videos});
-}
-
-/// Parses a Google Sheet CSV export into categories of playable videos.
+/// Parses a Google Sheet CSV export into a flat list of playable videos.
 ///
 /// Expected columns (header row, case-insensitive): `Link` (or `URL`),
-/// `Title`, optional `Duplicate`, optional `Category`.
+/// `Title`, optional `Duplicate`. Any other columns (e.g. `Category`) are
+/// ignored.
 ///  - Rows flagged `Duplicate = TRUE` are skipped.
 ///  - Each link is decoded to its clean playable URL.
-///  - If a `Category` column is present and non-empty it is used; otherwise the
-///    category is derived from the title via [CategorizerService].
+///  - Title falls back to the URL when blank.
 class CsvParserService {
   final LinkDecoderService _decoder;
-  final CategorizerService _categorizer;
 
-  CsvParserService({
-    LinkDecoderService? decoder,
-    CategorizerService? categorizer,
-  })  : _decoder = decoder ?? LinkDecoderService(),
-        _categorizer = categorizer ?? CategorizerService();
+  CsvParserService({LinkDecoderService? decoder})
+      : _decoder = decoder ?? LinkDecoderService();
 
-  List<ParsedCategory> parse(String csv) {
+  List<VideoModel> parse(String csv) {
     final rows = _parseCsv(csv);
     if (rows.isEmpty) return [];
 
@@ -43,12 +31,9 @@ class CsvParserService {
     final linkIdx = col(['link', 'url']);
     final titleIdx = col(['title']);
     final dupIdx = col(['duplicate']);
-    final catIdx = col(['category']);
     if (linkIdx == -1) return [];
 
-    final byCategory = <String, List<VideoModel>>{};
-    final order = <String>[];
-
+    final videos = <VideoModel>[];
     for (var i = 1; i < rows.length; i++) {
       final row = rows[i];
       String cell(int j) => (j >= 0 && j < row.length) ? row[j].trim() : '';
@@ -59,30 +44,13 @@ class CsvParserService {
 
       final url = _decoder.decode(rawLink);
       final rawTitle = cell(titleIdx);
-      final title = rawTitle.isNotEmpty ? rawTitle : url;
-      final explicitCat = cell(catIdx);
-      final category =
-          explicitCat.isNotEmpty ? explicitCat : _categorizer.categorize(title);
-
-      final list = byCategory.putIfAbsent(category, () {
-        order.add(category);
-        return <VideoModel>[];
-      });
-      list.add(VideoModel(
-        categoryId: 0, // set after DB insert
-        title: title,
+      videos.add(VideoModel(
+        title: rawTitle.isNotEmpty ? rawTitle : url,
         url: url,
-        position: list.length,
+        position: videos.length,
       ));
     }
-
-    return [
-      for (final name in order)
-        ParsedCategory(
-          category: CategoryModel(name: name),
-          videos: byCategory[name]!,
-        ),
-    ];
+    return videos;
   }
 
   /// Minimal RFC 4180 CSV parser: handles quoted fields, doubled quotes,
