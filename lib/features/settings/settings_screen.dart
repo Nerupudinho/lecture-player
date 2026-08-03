@@ -100,16 +100,17 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   autocorrect: false,
                   decoration: const InputDecoration(
                     hintText:
-                        'https://docs.google.com/spreadsheets/d/<ID>/gviz/tq?tqx=out:csv',
+                        'https://raw.githubusercontent.com/<user>/<repo>/master/playlist/lectures.csv',
                     border: OutlineInputBorder(),
                     prefixIcon: Icon(Icons.link),
                   ),
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'Paste your Google Sheet CSV URL. Set the sheet to '
-                  '"Anyone with the link → Viewer", then use the gviz CSV link '
-                  '(…/gviz/tq?tqx=out:csv&gid=0).',
+                  'Paste the raw URL of your playlist CSV. The default lives at '
+                  'raw.githubusercontent.com/Nerupudinho/lecture-player/master/'
+                  'playlist/lectures.csv and is updated automatically. Any URL '
+                  'serving the same CSV columns works.',
                   style: TextStyle(fontSize: 12, color: Colors.grey.shade500),
                 ),
                 const SizedBox(height: 20),
@@ -160,7 +161,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 const Divider(),
                 const SizedBox(height: 16),
                 Text(
-                  'Sheet Format',
+                  'Playlist Format',
                   style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w600,
@@ -176,9 +177,11 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   child: const Text(
                     'Link            | Title           | Duplicate\n'
                     'maven.com/p/... | Lecture title   | FALSE\n'
+                    'lennysnews.../p | Podcast episode | FALSE\n'
                     'youtube.com/... | Another lecture | FALSE\n\n'
-                    'Maven tracking links are decoded automatically.\n'
-                    'Rows with Duplicate = TRUE are skipped.',
+                    'Tracking links are decoded automatically.\n'
+                    'Rows with Duplicate = TRUE are skipped.\n'
+                    'Extra columns (Source, Added) are ignored.',
                     style: TextStyle(
                         fontFamily: 'monospace', fontSize: 12, height: 1.6),
                   ),

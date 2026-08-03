@@ -9,8 +9,9 @@ Commute time was being wasted on passive YouTube browsing. This app lets you del
 ## Features
 
 - A clean, flat list of your lecture titles — tap any to play, or Shuffle for a random one
-- Playlist synced from a **Google Sheet** — paste the sheet's CSV URL in Settings; auto-syncs on every launch (plus pull-to-refresh)
-- Maven email tracking links are decoded automatically to clean, playable URLs
+- Playlist lives in this repo at [`playlist/lectures.csv`](playlist/lectures.csv) and is kept up to date automatically
+- Course recordings (Maven and instructors' own domains) plus PM podcast episodes
+- Email tracking links are decoded automatically to clean, playable URLs
 - Rows flagged `Duplicate = TRUE` are skipped
 - Zero cost to run
 
@@ -19,17 +20,29 @@ Commute time was being wasted on passive YouTube browsing. This app lets you del
 1. Clone the repo
 2. Run `flutter pub get`
 3. Build and install on Android: `flutter run`
-4. Make your Google Sheet shareable: **Share → General access → Anyone with the link → Viewer**
-5. In Settings, paste the sheet's CSV export URL:
-   `https://docs.google.com/spreadsheets/d/<SHEET_ID>/gviz/tq?tqx=out:csv&gid=0`
+4. In Settings, paste the playlist URL:
+   `https://raw.githubusercontent.com/Nerupudinho/lecture-player/master/playlist/lectures.csv`
 
-### Sheet format
+Any URL serving the same columns works — swap it for your own fork or a private
+Gist if you'd rather not use this one.
 
-| Link | Title | Duplicate |
-|------|-------|-----------|
-| `https://maven.com/p/...` (or a Maven tracking link) | Lecture title | `FALSE` |
+### Playlist format
 
-The `Link` (or `URL`) and `Title` columns are required; `Duplicate` is optional. Any other columns are ignored.
+| Link | Title | Duplicate | Source | Added |
+|------|-------|-----------|--------|-------|
+| `https://maven.com/p/...` | Lecture title | `FALSE` | `maven` | `2026-08-04` |
+| `https://www.lennysnewsletter.com/p/...` | Podcast episode | `FALSE` | `lennys-podcast` | `2026-08-04` |
+
+`Link` (or `URL`) and `Title` are required; `Duplicate` is optional. `Source` and
+`Added` are bookkeeping for the sync job — the app ignores them, along with any
+other extra column.
+
+## How the playlist stays current
+
+A scheduled job scans Gmail for course-recording and podcast emails, extracts the
+canonical `/p/<slug>` URL, de-duplicates against the existing playlist, and commits
+new rows. Because the playlist is a file in git, every addition is visible in the
+commit history — if the job stops running, the gap is obvious.
 
 ## Stack
 
