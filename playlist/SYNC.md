@@ -80,9 +80,45 @@ a `TRUE` one when collapsing, so a playable entry is never hidden by its dupe.
 
 ## Columns
 
-`Link,Title,Duplicate,Source,Added` — the app reads only the first three and
-ignores the rest (see `test/csv_parser_test.dart`). `Source` and `Added` are
-bookkeeping for this job.
+`Link,Title,Duplicate,Source,Added,Published` — the app reads only the first
+three and ignores the rest (see `test/csv_parser_test.dart`). `Source`, `Added`,
+and `Published` are bookkeeping for this job.
+
+| Column | Description |
+|--------|-------------|
+| Link | Canonical playable URL |
+| Title | Episode/session title |
+| Duplicate | `TRUE` if another row has the same content |
+| Source | Domain or shorthand for the source (e.g. `maven`, `lennys-podcast`) |
+| Added | Date row was ingested (may be blank for older rows) |
+| Published | Actual publication date (`YYYY-MM-DD`) from the source page |
+
+## Published column
+
+The `Published` column holds the actual publication/upload date, **not** the
+ingest date. This is required for sorting the playlist newest-first.
+
+**How to populate for new entries:**
+
+1. **YouTube** — scrape `dateText` from the page JSON (e.g. `"Mar 22, 2026"`)
+2. **Substack** (`lennysnewsletter.com`, `news.aakashg.com`, `theskip.substack.com`,
+   `thehellopm.substack.com`, `suprainsider.substack.com`, etc.) — extract
+   `datePublished` from JSON-LD `<script type="application/ld+json">`
+3. **Maven** (`maven.com/p/<id>`) — extract `uploadDate` from JSON-LD when available
+4. **Other sources** — try JSON-LD or meta tags; if no date is discoverable,
+   leave `Published` blank
+
+See `scripts/fetch_dates.py` for the extraction logic.
+
+## Sort order
+
+**The CSV must be sorted by Published date, newest first.** Rows without a
+Published date go at the bottom. This ensures the phone app displays
+latest-published lectures at the top.
+
+When adding new rows:
+1. Fetch the Published date using the methods above
+2. Insert the row in the correct position to maintain sort order
 
 ## After changing anything
 
