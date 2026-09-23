@@ -17,6 +17,10 @@ Excluded:
 - Daily audio briefs (GenAI PM Daily's "3 min listen") — churns the list
 - Text newsletters with no episode
 
+**Multi-link emails:** Emails with several playable links (e.g. Lightning
+Lessons with multiple "Watch now" buttons) must yield one row per missing
+playable URL—do not stop after the first link.
+
 ## Match on content, not sender
 
 The original Apps Script filtered by sender (`maven.com`, `hellopm.co`). That
@@ -44,10 +48,14 @@ bodies are ~100 KB each. Fetching every body does not scale. Use this order:
    Returns exact `title` + `canonical_url`. Resolves most of the rest.
 3. **Slug-prefix probing** — build `.../p/<first-N-title-tokens>` and HEAD-check,
    shrinking N. Substack truncates slugs, so this catches many.
-4. **Email body** — last resort, authoritative. First plaintext `/p/` link is
-   the canonical URL. For cross-posts the link is HTML-only, as
-   `open.substack.com/pub/<pub>/p/<slug>` → normalise to
-   `https://<pub>.substack.com/p/<slug>`.
+4. **Email body** — last resort, authoritative. Extract **every distinct
+   playable link** from the message: Maven (`maven.com/p/<id>`), Substack or
+   other publication (`/p/<slug>`), YouTube watch/listen URLs, etc. Dedup
+   within the message. For each new URL that is not already in the playlist,
+   add a row (title from adjacent heading or link text; fetch Published per
+   the rules below). **Do not stop after the first link.** For cross-posts the
+   link may be HTML-only, as `open.substack.com/pub/<pub>/p/<slug>` →
+   normalise to `https://<pub>.substack.com/p/<slug>`.
 
 **Slug matching alone is not sufficient.** Product Growth's slugs are
 hand-written and unrelated to titles:
