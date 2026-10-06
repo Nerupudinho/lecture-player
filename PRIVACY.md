@@ -1,6 +1,6 @@
 # Privacy Policy for Lecture Player
 
-**Effective Date:** 2026-01-01
+**Effective Date:** 2026-10-06
 
 ## Summary
 
