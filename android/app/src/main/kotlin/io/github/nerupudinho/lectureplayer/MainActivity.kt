@@ -1,4 +1,4 @@
-package com.personal.lecture_player
+package io.github.nerupudinho.lectureplayer
 
 import io.flutter.embedding.android.FlutterActivity
 

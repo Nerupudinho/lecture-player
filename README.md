@@ -1,6 +1,6 @@
 # Lecture Player
 
-A Flutter Android app for commute learning. Aggregates YouTube playlists and lecture recordings into a single player with a clean title list and one-tap random playback. No ads, no algorithm, no distractions — just your content.
+A Flutter Android app for commute learning. Displays lectures from a CSV playlist and opens them externally in YouTube or your browser. Clean title list, one-tap playback, shuffle for randomness. No ads, no algorithm, no distractions — just your content.
 
 ## Why
 
@@ -8,12 +8,13 @@ Commute time was being wasted on passive YouTube browsing. This app lets you del
 
 ## Features
 
-- A clean, flat list of your lecture titles — tap any to play, or Shuffle for a random one
-- Playlist lives in this repo at [`playlist/lectures.csv`](playlist/lectures.csv) and is kept up to date automatically
+- A clean, flat list of your lecture titles — tap any to open in YouTube or your browser, or Shuffle for a random one
+- Playback is external (YouTube app, browser) — the app is a launcher, not an embedded player
+- Playlist lives in this repo at [`playlist/lectures.csv`](playlist/lectures.csv) as a CSV file
 - Course recordings (Maven and instructors' own domains) plus PM podcast episodes
 - Email tracking links are decoded automatically to clean, playable URLs
 - Rows flagged `Duplicate = TRUE` are skipped
-- Zero cost to run
+- Zero ads, zero tracking, zero cost to run
 
 ## Setup
 
