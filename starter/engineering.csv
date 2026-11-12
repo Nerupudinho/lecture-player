@@ -1,0 +1,11 @@
+Link,Title,Why,Minutes,Added,Source
+https://www.youtube.com/watch?v=SxdOUGdseq4,"""Simple Made Easy"" - Rich Hickey (2011)",The talk that teaches you to tell simple from merely familiar.,61,2026-11-12,strange-loop
+https://www.youtube.com/watch?v=f84n5oFoZBc,Hammock Driven Development - Rich Hickey,Why stepping back to think is the most productive part of coding.,40,2026-11-12,clojuretv
+https://www.youtube.com/watch?v=CZ3wIuvmHeM,Mastering Chaos - A Netflix Guide to Microservices,Real-world microservice failure modes and fixes from Netflix at scale.,53,2026-11-12,infoq
+https://www.youtube.com/watch?v=lJ8ydIuPFeU,"""How NOT to Measure Latency"" by Gil Tene",Shows why your latency dashboards are probably lying to you.,43,2026-11-12,strange-loop
+https://www.youtube.com/watch?v=fU9hR3kiOK0,"""Turning the database inside out with Apache Samza"" by Martin Kleppmann",A mind-shifting look at logs and streams as the core of data systems.,47,2026-11-12,strange-loop
+https://www.youtube.com/watch?v=i7twT3x5yv8,System Design Interview: A Step-By-Step Guide,A crisp framework for approaching any system design problem.,10,2026-11-12,bytebytego
+https://www.youtube.com/watch?v=1nENigGr-a0,System Design Was HARD - Until You Knew the Trade-Offs,Five minutes on the trade-offs behind almost every design decision.,5,2026-11-12,bytebytego
+https://www.youtube.com/watch?v=8bZh5LMaSmE,RailsConf 2014 - All the Little Things by Sandi Metz,A masterclass in refactoring messy code into small clear pieces.,39,2026-11-12,confreaks
+https://www.youtube.com/watch?v=lKXe3HUG2l4,"""The Mess We're In"" by Joe Armstrong",Erlang's creator on why software got so complex and how to push back.,46,2026-11-12,strange-loop
+https://www.youtube.com/watch?v=aSXaxOdVtAQ,"TDD, AI agents and coding with Kent Beck",A legend of the craft on testing and careers in the age of AI agents.,75,2026-11-12,pragmatic-engineer
