@@ -2,16 +2,34 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'features/home/home_provider.dart';
 import 'features/home/home_screen.dart';
+import 'features/onboarding/onboarding_screen.dart';
 import 'features/settings/settings_screen.dart';
 
-class LecturePlayerApp extends ConsumerStatefulWidget {
+/// Root: first-time users (no list yet) see onboarding; everyone else gets
+/// the home and settings tabs. Existing installs already have a source URL,
+/// so they never see onboarding.
+class LecturePlayerApp extends ConsumerWidget {
   const LecturePlayerApp({super.key});
 
   @override
-  ConsumerState<LecturePlayerApp> createState() => _LecturePlayerAppState();
+  Widget build(BuildContext context, WidgetRef ref) {
+    final source = ref.watch(listSourceProvider);
+    return source.when(
+      loading: () => const Scaffold(body: SizedBox.shrink()),
+      error: (_, __) => const _Tabs(),
+      data: (s) => s is NoSource ? const OnboardingScreen() : const _Tabs(),
+    );
+  }
 }
 
-class _LecturePlayerAppState extends ConsumerState<LecturePlayerApp> {
+class _Tabs extends ConsumerStatefulWidget {
+  const _Tabs();
+
+  @override
+  ConsumerState<_Tabs> createState() => _TabsState();
+}
+
+class _TabsState extends ConsumerState<_Tabs> {
   int _currentIndex = 0;
 
   static const List<Widget> _tabs = [
@@ -22,8 +40,8 @@ class _LecturePlayerAppState extends ConsumerState<LecturePlayerApp> {
   @override
   void initState() {
     super.initState();
-    // Auto-sync from the sheet once on launch. Runs silently; any error
-    // surfaces in the home screen's banner.
+    // Sync once on launch. Runs silently; any error surfaces in the home
+    // screen's banner.
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(refreshStateProvider.notifier).refresh();
     });

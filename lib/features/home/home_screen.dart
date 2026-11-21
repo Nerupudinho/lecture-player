@@ -4,6 +4,7 @@ import '../../data/models/video_model.dart';
 import '../../shared/shuffle_service.dart';
 import '../player/player_screen.dart';
 import 'home_provider.dart';
+import 'list_status_card.dart';
 
 final _shuffleServiceProvider = Provider((_) => ShuffleService());
 
@@ -74,6 +75,7 @@ class HomeScreen extends ConsumerWidget {
                 ),
               ),
             ),
+          ListStatusCard(videos: videos),
           // Shuffle All button
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 12, 16, 4),
@@ -122,9 +124,21 @@ class HomeScreen extends ConsumerWidget {
                     itemCount: videos.length,
                     itemBuilder: (_, i) {
                       final video = videos[i];
+                      final meta = [
+                        if (video.minutes != null) '${video.minutes} min',
+                        if (video.why != null) video.why!,
+                      ].join(' · ');
                       return ListTile(
                         leading: const Icon(Icons.play_circle_outline),
                         title: Text(video.title),
+                        subtitle: meta.isEmpty
+                            ? null
+                            : Text(meta,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.grey.shade500)),
                         onTap: () => _play(context, ref, video, videos),
                       );
                     },
@@ -160,7 +174,7 @@ class _EmptyState extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            'Go to Settings, paste your playlist URL, and tap Refresh.',
+            'Pull down to refresh, or connect your list in Settings.',
             textAlign: TextAlign.center,
             style: TextStyle(color: Colors.grey.shade500),
           ),

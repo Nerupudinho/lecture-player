@@ -16,6 +16,25 @@ Commute time was being wasted on passive YouTube browsing. This app lets you del
 - Rows flagged `Duplicate = TRUE` are skipped
 - Zero ads, zero tracking, zero cost to run
 
+## First run: built for your agent
+
+A new user never sees an empty screen or a CSV field:
+
+1. **Pick topics** (Product, AI, Startups, Engineering) and get a hand-picked
+   starter list of public talks immediately (`starter/*.csv`, bundled in the app).
+2. **Connect my agent** hands the playlist skill
+   ([`agent-kit/SKILL.md`](agent-kit/SKILL.md)) to Claude, ChatGPT, Grok or any
+   agent, with the user's topics filled in. The agent creates a public list
+   (Gist, GitHub file or Google Sheet), fills it, schedules a weekly refresh and
+   replies with the link.
+3. **Paste the link.** The app accepts Sheet, Gist, GitHub-file or raw links,
+   checks the file and says exactly what to fix if it can't load it.
+4. **Stays fresh.** The home screen shows "updated 2 days ago · 5 new" from the
+   `Added` dates the agent writes, and nudges the user to re-share the skill if
+   nothing has been added for 10 days.
+
+Existing installs that already have a playlist URL skip all of this.
+
 ## Setup
 
 1. Clone the repo
@@ -29,14 +48,14 @@ Gist if you'd rather not use this one.
 
 ### Playlist format
 
-| Link | Title | Duplicate | Source | Added |
-|------|-------|-----------|--------|-------|
-| `https://maven.com/p/...` | Lecture title | `FALSE` | `maven` | `2026-08-04` |
-| `https://www.lennysnewsletter.com/p/...` | Podcast episode | `FALSE` | `lennys-podcast` | `2026-08-04` |
+| Link | Title | Why | Minutes | Added | Source |
+|------|-------|-----|---------|-------|--------|
+| `https://www.youtube.com/watch?v=...` | Talk title | Why it's worth it | `42` | `2026-11-12` | `ycombinator` |
 
-`Link` (or `URL`) and `Title` are required; `Duplicate` is optional. `Source` and
-`Added` are bookkeeping for the sync job — the app ignores them, along with any
-other extra column.
+`Link` (or `URL`) and `Title` are required. `Why` and `Minutes` show under each
+title. `Added` (`YYYY-MM-DD`) drives the "updated" and "new" line on the home
+screen. Rows with `Duplicate = TRUE` are skipped, a repeated URL is shown once,
+and any other column is ignored.
 
 ## How the playlist stays current
 

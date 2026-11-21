@@ -17,7 +17,7 @@ class DatabaseHelper {
     final path = join(dbPath, 'lecture_player.db');
     return openDatabase(
       path,
-      version: 2,
+      version: 3,
       onCreate: _onCreate,
       onUpgrade: _onUpgrade,
     );
@@ -41,6 +41,13 @@ class DatabaseHelper {
       await db.execute('DROP TABLE IF EXISTS categories');
       await db.execute('DROP TABLE IF EXISTS videos');
       await _createVideos(db);
+      return;
+    }
+    // v3 adds the optional Why / Minutes / Added columns. The videos table is
+    // a cache of the remote list, so recreating it is safe; config is kept.
+    if (oldVersion < 3) {
+      await db.execute('DROP TABLE IF EXISTS videos');
+      await _createVideos(db);
     }
   }
 
@@ -50,7 +57,10 @@ class DatabaseHelper {
         id       INTEGER PRIMARY KEY AUTOINCREMENT,
         title    TEXT NOT NULL,
         url      TEXT NOT NULL,
-        position INTEGER NOT NULL
+        position INTEGER NOT NULL,
+        why      TEXT,
+        minutes  INTEGER,
+        added    TEXT
       )
     ''');
   }
