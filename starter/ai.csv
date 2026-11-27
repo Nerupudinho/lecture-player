@@ -1,0 +1,11 @@
+Link,Title,Why,Minutes,Added,Source
+https://www.youtube.com/watch?v=LPZh9BOjkQs,Large Language Models explained briefly,The clearest 8-minute picture of what an LLM actually does.,8,2026-11-12,3blue1brown
+https://www.youtube.com/watch?v=zjkBMFhNj_g,[1hr Talk] Intro to Large Language Models - Andrej Karpathy,The best single hour on how LLMs work and where they are headed.,60,2026-11-12,karpathy
+https://www.youtube.com/watch?v=wjZofJX0v4M,"Transformers, the tech behind LLMs | Deep Learning Chapter 5",Visual intuition for the transformer without needing the math first.,27,2026-11-12,3blue1brown
+https://www.youtube.com/watch?v=bZQun8Y4L2A,State of GPT - Andrej Karpathy (Microsoft Build),How GPT assistants are trained and how to prompt them well in practice.,42,2026-11-12,microsoft
+https://www.youtube.com/watch?v=LCEmiRjPEtQ,Andrej Karpathy: Software Is Changing (Again),Software 3.0: why natural language is the new programming interface.,40,2026-11-12,ycombinator
+https://www.youtube.com/watch?v=D7_ipDqhtwk,"How We Build Effective Agents: Barry Zhang, Anthropic",When to build an agent and when a simple workflow is the better call.,15,2026-11-12,ai-engineer
+https://www.youtube.com/watch?v=sal78ACtGTc,What's next for AI agentic workflows ft. Andrew Ng of AI Fund,"Four agentic design patterns: reflection, tools, planning, multi-agent.",14,2026-11-12,sequoia
+https://www.youtube.com/watch?v=qBHfQT3YtyY,What We Learned From A Year of Building With LLMs,Hard-won lessons on evals and shipping LLM products from six practitioners.,35,2026-11-12,ai-engineer
+https://www.youtube.com/watch?v=8rABwKRsec4,"The New Code - Sean Grove, OpenAI",Why clear written specs may matter more than the code AI writes.,22,2026-11-12,ai-engineer
+https://www.youtube.com/watch?v=gv0WHhKelSE,Claude Code best practices | Code w/ Claude,Practical habits for getting real work done with an AI coding agent.,26,2026-11-12,anthropic

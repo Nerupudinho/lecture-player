@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../services/source_link.dart';
+import '../agent/agent_setup_screen.dart';
 import '../home/home_provider.dart';
 
 class SettingsScreen extends ConsumerStatefulWidget {
@@ -22,8 +24,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
 
   Future<void> _loadConfig() async {
     final configDao = ref.read(configDaoProvider);
-    final url = await configDao.get('source_url') ?? '';
-    final last = await configDao.get('last_fetched_at');
+    final url = await configDao.get(kSourceUrl) ?? '';
+    final last = await configDao.get(kLastFetchedAt);
     if (mounted) {
       setState(() {
         _urlController.text = url;
@@ -34,14 +36,15 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   }
 
   Future<void> _saveAndRefresh() async {
-    final url = _urlController.text.trim();
+    final url = SourceLink.normalize(_urlController.text);
     if (url.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Please enter a source URL first.')),
       );
       return;
     }
-    await ref.read(configDaoProvider).set('source_url', url);
+    await ref.read(configDaoProvider).set(kSourceUrl, url);
+    _urlController.text = url;
     await ref.read(refreshStateProvider.notifier).refresh();
 
     if (mounted) {
@@ -53,6 +56,14 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
         );
       }
     }
+  }
+
+  Future<void> _backToStarters() async {
+    final config = ref.read(configDaoProvider);
+    await config.set(kSourceUrl, '');
+    await config.set(kStarterTopics, '');
+    // No source left: the root shows the topic picker again.
+    ref.invalidate(listSourceProvider);
   }
 
   String _formatTimestamp(String? iso) {
@@ -86,6 +97,18 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           : ListView(
               padding: const EdgeInsets.all(16),
               children: [
+                SizedBox(
+                  width: double.infinity,
+                  child: OutlinedButton.icon(
+                    onPressed: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => const AgentSetupScreen())),
+                    icon: const Icon(Icons.smart_toy_outlined),
+                    label: const Text('Connect my agent'),
+                  ),
+                ),
+                const SizedBox(height: 24),
                 const Text(
                   'Playlist Source URL',
                   style: TextStyle(
@@ -107,10 +130,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'Paste the raw URL of your playlist CSV. The default lives at '
-                  'raw.githubusercontent.com/Nerupudinho/lecture-player/master/'
-                  'playlist/lectures.csv and is updated automatically. Any URL '
-                  'serving the same CSV columns works.',
+                  'A Google Sheet, Gist, GitHub file or raw CSV link. Leave '
+                  'empty and use a starter list instead from below.',
                   style: TextStyle(fontSize: 12, color: Colors.grey.shade500),
                 ),
                 const SizedBox(height: 20),
@@ -157,7 +178,13 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 32),
+                const SizedBox(height: 8),
+                TextButton.icon(
+                  onPressed: isRefreshing ? null : _backToStarters,
+                  icon: const Icon(Icons.restart_alt, size: 18),
+                  label: const Text('Use a starter list instead'),
+                ),
+                const SizedBox(height: 24),
                 const Divider(),
                 const SizedBox(height: 16),
                 Text(
@@ -175,13 +202,12 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: const Text(
-                    'Link            | Title           | Duplicate\n'
-                    'maven.com/p/... | Lecture title   | FALSE\n'
-                    'lennysnews.../p | Podcast episode | FALSE\n'
-                    'youtube.com/... | Another lecture | FALSE\n\n'
-                    'Tracking links are decoded automatically.\n'
+                    'Link,Title,Why,Minutes,Added\n\n'
+                    'Link and Title are required.\n'
+                    'Why and Minutes show under each title.\n'
+                    'Added (YYYY-MM-DD) drives "updated" and "new".\n'
                     'Rows with Duplicate = TRUE are skipped.\n'
-                    'Extra columns (Source, Added) are ignored.',
+                    'Other columns are ignored.',
                     style: TextStyle(
                         fontFamily: 'monospace', fontSize: 12, height: 1.6),
                   ),
